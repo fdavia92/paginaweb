@@ -43,7 +43,9 @@ RUN pip install --upgrade pip && \
     useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow && \
     pip install apache-airflow[crypto,celery,postgres,kubernetes,docker]==${AIRFLOW_VERSION} --constraint /requirements-python3.8.txt && \
     pip install pip install mysqlclient && \
-    pip install beautifulsoup4
+    pip install beautifulsoup4 && \
+    pip install html5lib && \
+    pip install lxml
 
 # Copy the entrypoint.sh from host to container (at path AIRFLOW_HOME)
 COPY ./entrypoint.sh ./entrypoint.sh
