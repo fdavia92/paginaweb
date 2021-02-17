@@ -8,7 +8,7 @@ services:
       - ./wordpress:/var/www/html
     environment:
       - WORDPRESS_DB_NAME=delta-analysis
-      - WORDPRESS_TABLE_PREFIX=wp_
+      - WORDPRESS_TABLE_PREFIX=data_
       - WORDPRESS_DB_HOST=mysql
       - WORDPRESS_DB_USER=root
       - WORDPRESS_DB_PASSWORD=VX9LU7vay%GsXlv(ts
@@ -56,8 +56,8 @@ services:
       - PMA_HOST=mysql
       - MYSQL_ROOT_PASSWORD=VX9LU7vay%GsXlv(ts
       # For nginx-proxy
-      - VIRTUAL_HOST=wp-sql.deltaanalysis.com
-      - LETSENCRYPT_HOST=wp-sql.deltaanalysis.com
+      - VIRTUAL_HOST=wp-data.deltaanalysis.com
+      - LETSENCRYPT_HOST=wp-data.deltaanalysis.com
       - LETSENCRYPT_EMAIL=federico.davia@gmail.com
       - VIRTUAL_PORT=80
     networks:
@@ -118,8 +118,8 @@ services:
       - PMA_HOST=mysql-airflow
       - MYSQL_ROOT_PASSWORD=VX9LU7vay%GsXlv(ts
       # For nginx-proxy
-      - VIRTUAL_HOST=airflow-sql.deltaanalysis.com
-      - LETSENCRYPT_HOST=airflow-sql.deltaanalysis.com
+      - VIRTUAL_HOST=datapoints.deltaanalysis.com
+      - LETSENCRYPT_HOST=datapoints.deltaanalysis.com
       - LETSENCRYPT_EMAIL=federico.davia@gmail.com
       - VIRTUAL_PORT=80
     networks:
