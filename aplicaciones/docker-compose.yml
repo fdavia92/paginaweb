@@ -63,5 +63,13 @@ services:
       - flumenar_default
       - nginx-proxy
 
+# Networks
+networks:
+  nginx-proxy:
+      external: true
+      name: nginx-proxy
+  flumenar_default:
+      external: true
+      name: flumenar_default
 
 
