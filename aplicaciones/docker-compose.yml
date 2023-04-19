@@ -24,8 +24,12 @@ services:
       - phpmyadmin
     restart: always
     networks:
-        - flumenar_default
-        - nginx-proxy
+      flumenar_default:
+        external:
+            name: flumenar_default
+      nginx-proxy:
+        external:
+            name: nginx-proxy
 
 
   mysql:
@@ -40,7 +44,9 @@ services:
       - MYSQL_DATABASE=flumenar
     restart: always
     networks:
-      - flumenar_default
+      flumenar_default:
+        external:
+            name: flumenar_default
 
   phpmyadmin:
     depends_on:
@@ -61,76 +67,12 @@ services:
       - LETSENCRYPT_EMAIL=federico.davia@gmail.com
       - VIRTUAL_PORT=80
     networks:
-      - flumenar_default
-      - nginx-proxy
-
-# Airflow
-
-  airflow:
-    build: ./airflow/docker
-    restart: always
-    container_name: airflow
-    volumes:
-      - ./airflow/mnt/airflow/airflow.cfg:/usr/local/airflow/airflow.cfg
-      - ./airflow/mnt/airflow/dags:/usr/local/airflow/dags
-    ports:
-      - "8080"
-    environment:
-      # For nginx-proxy
-      - VIRTUAL_HOST=airflow.deltaanalysis.com
-      - LETSENCRYPT_HOST=airflow.deltaanalysis.com
-      - LETSENCRYPT_EMAIL=federico.davia@gmail.com
-      - VIRTUAL_PORT=8080
-    networks:
-      - delta_analysis_default
-      - nginx-proxy
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "airflow", "8080" ]
-      timeout: 45s
-      interval: 10s
-      retries: 10
-
-  mysql-airflow:
-    image: mariadb:latest
-    container_name: mysql-airflow
-    volumes:
-      - ./mysql/airflow:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=VX9LU7vay%GsXlv(ts
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=VX9LU7vay%GsXlv(ts
-      - MYSQL_DATABASE=airflow_data
-    restart: always
-    networks:
-      - delta_analysis_default
-
-  phpmyadmin-airflow:
-    depends_on:
-      - mysql-airflow
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin-airflow
-    volumes:
-      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
-    restart: always
-    ports:
-      - "80"
-    environment:
-      - PMA_HOST=mysql-airflow
-      - MYSQL_ROOT_PASSWORD=VX9LU7vay%GsXlv(ts
-      # For nginx-proxy
-      - VIRTUAL_HOST=datapoints.deltaanalysis.com
-      - LETSENCRYPT_HOST=datapoints.deltaanalysis.com
-      - LETSENCRYPT_EMAIL=federico.davia@gmail.com
-      - VIRTUAL_PORT=80
-    networks:
-      - delta_analysis_default
-      - nginx-proxy
-
-networks:
-    delta_analysis_default:
-        name: delta_analysis_default
-    nginx-proxy:
+      flumenar_default:
+        external:
+            name: flumenar_default
+      nginx-proxy:
         external:
             name: nginx-proxy
+
 
 
