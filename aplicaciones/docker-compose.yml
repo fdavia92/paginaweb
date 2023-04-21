@@ -1,66 +1,18 @@
 version: '3.6'
 services:
-
-  wordpress:
-    image: wordpress:latest
-    container_name: flumenar
-    volumes:
-      - ./wordpress:/var/www/html
+  website:
+    image: flumenar-angular
+    container_name: website
+    restart: always
+    ports:
+      - "80"
     environment:
-      - WORDPRESS_DB_NAME=flumenar
-      - WORDPRESS_TABLE_PREFIX=data_
-      - WORDPRESS_DB_HOST=mysql
-      - WORDPRESS_DB_USER=root
-      - WORDPRESS_DB_PASSWORD=VX9LU7vay%GsXlv(ts
       # For nginx-proxy
       - VIRTUAL_HOST=flumenar.com,www.flumenar.com,flumenar.com.ar,www.flumenar.com.ar
       - LETSENCRYPT_HOST=flumenar.com,www.flumenar.com,flumenar.com.ar,www.flumenar.com.ar
       - LETSENCRYPT_EMAIL=federico.davia@gmail.com
       - VIRTUAL_PORT=80
-    expose:
-      - "80"
-    depends_on:
-      - mysql
-      - phpmyadmin
-    restart: always
     networks:
-      - flumenar_default
-      - nginx-proxy
-
-  mysql:
-    image: mariadb:latest
-    container_name: mysql
-    volumes:
-      - ./mysql/wordpress:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=VX9LU7vay%GsXlv(ts
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=VX9LU7vay%GsXlv(ts
-      - MYSQL_DATABASE=flumenar
-    restart: always
-    networks:
-      - flumenar_default
-
-  phpmyadmin:
-    depends_on:
-      - mysql
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin
-    volumes:
-      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
-    restart: always
-    ports:
-      - "80"
-    environment:
-      - PMA_HOST=mysql
-      - MYSQL_ROOT_PASSWORD=VX9LU7vay%GsXlv(ts
-      # For nginx-proxy
-      - VIRTUAL_HOST=wp-data.flumenar.com
-      - LETSENCRYPT_HOST=wp-data.flumenar.com
-      - LETSENCRYPT_EMAIL=federico.davia@gmail.com
-      - VIRTUAL_PORT=80
-    networks:
-      - flumenar_default
       - nginx-proxy
 
 # Networks
@@ -68,8 +20,5 @@ networks:
   nginx-proxy:
       external: true
       name: nginx-proxy
-  flumenar_default:
-      external: true
-      name: flumenar_default
 
 
